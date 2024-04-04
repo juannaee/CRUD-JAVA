@@ -6,7 +6,7 @@ Este é um projeto simples de aplicação em Java para gerenciamento de funcion�
 
 ### Visualizar Funcionários
 
-O método `visualizarDados(String consulta)` na classe `Main` permite visualizar os funcionários presentes no banco de dados. Ele aceita uma consulta SQL como parâmetro e exibe os resultados de forma dinâmica, lidando com diferentes tipos de colunas. As colunas são impressas com seus nomes e valores correspondentes, formatando datas no padrão dd/MM/yyyy quando necessário.
+O método `visualizarDados(String consulta)` na classe `Main` permite visualizar os funcionários presentes no banco de dados. Ele aceita uma consulta SQL como parâmetro e exibe os resultados de forma dinâmica, lidando com diferentes tipos de colunas. Este método utiliza o `ResultSetMetaData` para obter informações sobre o resultado da consulta, incluindo o número de colunas e seus nomes. As colunas são impressas com seus nomes e valores correspondentes, formatando datas no padrão dd/MM/yyyy quando necessário.
 
 ### Visualizar Departamentos
 
@@ -39,6 +39,10 @@ Este projeto requer o driver JDBC para conexão com o banco de dados MySQL.
 ## Última Modificação
 
 Este arquivo foi atualizado em 2024-04-07.
+
+## Dinamismo da Aplicação
+
+A aplicação é dinâmica devido ao uso do método `visualizarDados(String consulta)`. Este método aceita qualquer consulta SQL como parâmetro, permitindo a visualização de dados de qualquer tabela do banco de dados. Ele adapta dinamicamente a exibição dos resultados, lidando com diferentes tipos de colunas e formatando datas conforme necessário.
 
 ## Futuras Funcionalidades
 
