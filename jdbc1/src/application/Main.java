@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 //import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,8 +25,8 @@ public class Main {
 
 	public static void main(String[] args) {
 //		inserirDados();
-
-		visualizarDados(menuOpcaoVisualizacao());
+//		visualizarDados(menuOpcaoVisualizacao());
+		atualizarDados();
 	}
 
 	public static String menuOpcaoVisualizacao() {
@@ -104,15 +105,27 @@ public class Main {
 		try {
 
 			conn = DB.getConnection();
-			preparedStatement = conn.prepareStatement(insert);
-			preparedStatement.setString(1, "Juan Guilherme");
-			preparedStatement.setString(2, "juangsilvalemos@gmail.com");
-			preparedStatement.setDate(3, new java.sql.Date(sdf.parse("27/11/2001").getTime()));
-			preparedStatement.setDouble(4, 2500.00);
+			preparedStatement = conn.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
+			preparedStatement.setString(1, "Marcone teste");
+			preparedStatement.setString(2, "mesmoe480@gmail.com");
+			preparedStatement.setDate(3, new java.sql.Date(sdf.parse("14/04/2002").getTime()));
+			preparedStatement.setDouble(4, 4800.60);
 			preparedStatement.setInt(5, 4);
 
 			Integer linhasAlteradas = preparedStatement.executeUpdate();
-			System.out.println("Linhas afetadas: " + linhasAlteradas);
+			if (linhasAlteradas > 0) {
+				ResultSet resultSetKeys = preparedStatement.getGeneratedKeys();
+				while (resultSetKeys.next()) {
+
+					int id = resultSetKeys.getInt(1);
+					System.out.println("Id = " + id);
+				}
+
+			}
+
+			else {
+				System.out.println("Sem linhas alteradas");
+			}
 
 		}
 
@@ -122,6 +135,32 @@ public class Main {
 
 		catch (ParseException e) {
 			e.printStackTrace();
+		}
+
+		catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DB.closeStatament(preparedStatement);
+			DB.closeConnection();
+		}
+
+	}
+
+	public static void atualizarDados() {
+
+		try {
+
+			conn = DB.getConnection();
+
+			preparedStatement = conn.prepareStatement(
+					"UPDATE funcionario " + "SET SalarioBase = SalarioBase + ? " + "WHERE (DepartamentoId = ?)");
+
+			preparedStatement.setDouble(1, 500.0);
+			preparedStatement.setInt(2, 1);
+
+			Integer linhasAlteradas = preparedStatement.executeUpdate();
+			System.out.println("Deu certo!\nLinha Alterada: " + linhasAlteradas);
+
 		}
 
 		catch (Exception e) {
