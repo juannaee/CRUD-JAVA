@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 import db.DB;
+import db.DbIntegrityException;
 
 public class Main {
 //	public static Statement statement = null;
@@ -26,7 +27,8 @@ public class Main {
 	public static void main(String[] args) {
 //		inserirDados();
 //		visualizarDados(menuOpcaoVisualizacao());
-		atualizarDados();
+//		atualizarDados();
+//		deletarDados();
 	}
 
 	public static String menuOpcaoVisualizacao() {
@@ -167,6 +169,25 @@ public class Main {
 			e.printStackTrace();
 		}
 
+	}
+
+	public static void deletarDados() {
+
+		try {
+
+			conn = DB.getConnection();
+			preparedStatement = conn.prepareStatement("DELETE FROM funcionario " + "WHERE " + "DepartamentoId = ?");
+
+			preparedStatement.setInt(1, 4);
+			Integer linhasAlteradas = preparedStatement.executeUpdate();
+
+			System.out.println("Linhas alteradas: " + linhasAlteradas);
+
+		} catch (SQLException e) {
+			throw new DbIntegrityException(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
