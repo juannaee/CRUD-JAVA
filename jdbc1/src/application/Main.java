@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 import db.DB;
 import db.DbIntegrityException;
@@ -24,11 +25,12 @@ public class Main {
 
 	public static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 //		inserirDados();
 //		visualizarDados(menuOpcaoVisualizacao());
 //		atualizarDados();
-//		deletarDados();
+//		deletarDados();	
+//		testeDeTransacoes();
 	}
 
 	public static String menuOpcaoVisualizacao() {
@@ -188,6 +190,37 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void testeDeTransacoes() throws SQLException {
+		try {
+
+			conn = DB.getConnection();
+			conn.setAutoCommit(false);
+
+			preparedStatement = conn
+					.prepareStatement("UPDATE funcionario SET SalarioBase = 2900 WHERE DepartamentoId = 1");
+			int linha1 = preparedStatement.executeUpdate();
+			System.out.println("Linha alterada: " + linha1);
+			DB.closeStatament(preparedStatement);
+
+			conn.commit();
+
+		} catch (SQLException e) {
+			if (conn != null) {
+				conn.rollback();
+			}
+			e.printStackTrace();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			DB.closeStatament(preparedStatement);
+			DB.closeConnection();
+
+		}
+
 	}
 
 }
